@@ -1,0 +1,75 @@
+from NewsPortal.models import *
+import random, datetime
+
+alex=User.objects.create_user('Alex')
+steve=User.objects.create_user('Steve')
+
+Author.objects.create(user=alex)
+Author.objects.create(user=steve)
+
+Category.objects.create(name="Интересно")
+Category.objects.create(name="Cобытия")
+Category.objects.create(name="Анализ")
+Category.objects.create(name="Актуально")
+
+a=Author.objects.get(user__username='Alex')
+Post.objects.create(author=a, post_type=1, title="Статья1 от Alex", text="Текст от Alex")
+Post.objects.create(author=a, post_type=1, title="Статья2 от Alex", text="Текст2 от Alex")
+a=Author.objects.get(user__username='Steve')
+Post.objects.create(author=a, post_type=2, title="Новость от Steve", text="Текст от Steve")
+
+cat=Category.objects.all()
+p=Post.objects.all()
+p[0].categories.add(cat[0])
+p[0].categories.add(cat[2])
+p[0].categories.add(cat[3])
+p[1].categories.add(cat[1])
+p[1].categories.add(cat[3])
+p[2].categories.add(cat[0])
+p[2].categories.add(cat[3])
+
+users=User.objects.all()
+Comment.objects.create(post=p[0], user=users[0], comment_text=f'Коммент от {users[0].username})
+Comment.objects.create(post=p[0], user=users[3], comment_text=f'Коммент от {users[3].username})
+Comment.objects.create(post=p[0], user=users[1], comment_text=f'Коммент от {users[1].username})
+Comment.objects.create(post=p[1], user=users[0], comment_text=f'Коммент от {users[0].username})
+Comment.objects.create(post=p[1], user=users[1], comment_text=f'Коммент от {users[1].username})
+Comment.objects.create(post=p[2], user=users[2], comment_text=f'Коммент от {users[2].username})
+
+com=Comment.objects.all()
+for i in range(len(p)):
+	for j in range(random.randint(1, 11)):
+		p[i].like()
+	for j in range(random.randint(1, 11)):
+		p[i].dislike()
+
+for i in range(len(com)):
+	for j in range(random.randint(1, 11)):
+		com[i].like()
+	for j in range(random.randint(1, 11)):
+		com[i].dislike()
+
+
+for a in Author.objects.all():
+	r=0
+	posts = Post.objects.filter(author=a)
+	for d in posts.values('post_rate'):
+		r += d['post_rate'] * 3
+	coms = Comment.objects.filter(user=a.user)
+	for d in coms.values('comment_rate'):
+		r += d['comment_rate']
+	coms = Comment.objects.filter(post__author=a)
+	for d in coms.values('comment_rate'):
+		r += d['comment_rate']
+	a.update_rate(r)
+
+a = Author.objects.all().order_by('-user_rate')[0]
+f'Пользователь с наивысшим рейтингом: {a.user.username}. Рейтинг пользователя: {a.user_rate}'
+
+
+bestpost = Post.objects.filter(post_type=2).order_by('-post_rate')[0]
+print(f'Лучшая статья:\nОпубликована: {bestpost.date_added.date()}\nАвтор: {bestpost.author.user.username},\nрейтинг: {bestpost.post_rate}\nЗаголовок: {bestpost.title}\nПревью: {bestpost.preview()}')
+
+coms = Comment.objects.filter(post=bestpost)
+for c in coms:
+	print(f"Дата: {c.date_added.date()}\nПользователь: {c.user.username}\nРейтинг: {c.comment_rate}\nТекст: {c.comment_text}")

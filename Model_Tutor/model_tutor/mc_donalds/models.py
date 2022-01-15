@@ -1,7 +1,6 @@
 from django.db import models
 from datetime import datetime
 
-fullname = models.CharField(max_length=255)
 director = 'DI'
 admin = 'AD'
 cook = 'CO'
