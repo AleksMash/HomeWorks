@@ -27,6 +27,8 @@ class Post(models.Model):
     title = models.CharField(max_length=255)
     text = models.TextField()
     post_rate = models.FloatField(default=0.0)
+    def __str__(self):
+        return f'{self.title.title()}: {self.text[:20]}'
 
     def like(self):
         self.post_rate += 1
