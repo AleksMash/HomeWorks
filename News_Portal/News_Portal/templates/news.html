@@ -8,6 +8,36 @@ News
 
 <!-- В контенте на странице мы выводим все новости -->
 {% block content %}
-<h1>All news</h1>
-{{ news }}
+   <h1>Все новости (общее число новостей: {{ news|length }})</h1>
+    <hr>
+    {% if news %}
+        <table>
+            <tr>
+                <td>
+                    Заголовок
+                </td>
+                <td>
+                    Дата
+                </td>
+                <td>
+                    Содержание
+                </td>
+            </tr>
+        {% for n in news %}
+            <tr>
+                <td>
+                    {{ n.title }}
+                </td>
+                <td>
+                   {{ n.date_added|date:'d M Y' }}
+                </td>
+                <td>
+                    {{ n.text|truncatewords:20 }}
+                </td>
+            </tr>
+        {% endfor %}
+        </table>
+    {% else %}
+        <h2>Новостей нет!</h2>
+    {% endif %}
 {% endblock content %}
