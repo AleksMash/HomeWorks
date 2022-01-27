@@ -1,5 +1,7 @@
 {% extends 'flatpages/default.html' %}
 
+{% load custom_filters %} <!-- не забываем заранее загружать наши фильтры! -->
+
 {% block title %}
 Products
 {% endblock title %}
@@ -7,7 +9,7 @@ Products
 {% block content %}
     <h1>Все товары</h1>
     <h3>{{ time_now }}</h3>
-    <h3> {{ value1|default_if_none:"ничего" }} </h3> <!-- Здесь, если в переменной value1 будет записано None, то выведется текст НИЧЕГО -->
+    <h3> {{ value1|default_if_none:"ничего" }} </h3>
     <hr>
     {% if products %}
         <table>
@@ -31,7 +33,7 @@ Products
         {% for product in products %}
             <tr>
                 <td>
-                    {{ product.name }}
+                    {{ product.name|multiply:'a' }} <!-- применим наш фильтр, чтобы название товара вывелось 4 раза -->
                 </td>
                 <td>
                     {{ product.description|truncatewords:4 }}
