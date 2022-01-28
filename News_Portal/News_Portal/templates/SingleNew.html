@@ -1,6 +1,8 @@
 <!--  наследуемся от шаблона default.html, который мы создавали ещё во времена flatpages -->
 {% extends 'flatpages/default.html' %}
 
+{% load custom_filters %}
+
 <!-- Название у нас будет proudcts -->
 {% block title %}
 Просмотр новости
@@ -8,9 +10,9 @@
 
 <!-- В контенте на странице мы выводим сам товар, ID которого было передано в адрес -->
 {% block content %}
-<h1>{{ single_new.title }}</h1>
+<h1>{{ single_new.title|Censor }}</h1>
 <hr>
-<b>Дата публикации: {{ single_new.date_added|date:'d M Y' }}</b>
+<b>Дата публикации: {{ single_new.date_added|date:'d M Y h:i' }}</b>
 <hr>
-{{ single_new.text }}
+{{ single_new.text|Censor }}
 {% endblock content %}

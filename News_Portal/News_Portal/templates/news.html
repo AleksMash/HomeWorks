@@ -1,6 +1,8 @@
 <!--  наследуемся от шаблона default.html, который мы создавали ещё во времена flatpages -->
 {% extends 'flatpages/default.html' %}
 
+{% load custom_filters %}
+
 <!-- Название у нас будет proudcts -->
 {% block title %}
 News
@@ -26,13 +28,13 @@ News
         {% for n in news %}
             <tr>
                 <td>
-                    {{ n.title }}
+                    {{ n.title|Censor }}
                 </td>
                 <td>
                    {{ n.date_added|date:'d M Y' }}
                 </td>
                 <td>
-                    {{ n.text|truncatewords:20 }}
+                    {{ n.text|Censor|truncatewords:50 }}
                 </td>
             </tr>
         {% endfor %}
