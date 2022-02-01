@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     # подключаем наши приложения
     'django.contrib.sites',
     'django.contrib.flatpages',
+    'django_filters',
     'simpleapp'
 ]
 
