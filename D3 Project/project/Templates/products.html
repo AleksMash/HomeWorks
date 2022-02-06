@@ -31,7 +31,10 @@
     {% for product in filter.qs %} <!-- поменяем products на filter.qs, т. к. теперь мы забираем уже отобранную по каким-то параметрам информацию -->
     <tr>
         <td>
-            {{ product.name|title }}
+             <a href="{% url 'product_detail' product.id %}">{{ product.name|title }}</a>
+            <!-- При нажатии на имя товара в таблице нас теперь будет перекидывать на страницу с информацией о товаре -->
+            <a href="{% url 'product_update' product.id %}"><u>Редактировать</u></a> <!-- добавим ссылку на редактирование товара-->
+            <a href="{% url 'product_delete' product.id %}"><u> Удалить </u></a> <!-- добавим ссылку на удаление товара-->
         </td>
         <td>
             {{ product.category.name|title }}

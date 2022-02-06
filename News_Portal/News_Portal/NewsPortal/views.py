@@ -16,6 +16,8 @@ class NewsList(ListView):
     context_object_name = 'news'    # это имя списка, в котором будут
                                     # лежать все объекты, его надо указать, чтобы обратиться к самому списку объектов через _HTML_-шаблон
     queryset = Post.objects.filter(post_type=2).order_by('-id')
+    paginate_by = 2  #выводим по 3 новостей на страницу
+
 
 # создаём представление, в котором будут детали конкретного отдельного товара
 class NewDetail(DetailView):
