@@ -1,0 +1,51 @@
+<!--  наследуемся от шаблона default.html, который мы создавали ещё во времена flatpages -->
+{% extends 'flatpages/default.html' %}
+
+{% load custom_filters %}
+
+<!-- Название у нас будет proudcts -->
+{% block title %}
+News
+{% endblock title %}
+
+
+<!-- В контенте на странице мы выводим все новости -->
+{% block content %}
+<!-- Перед таблицей добавим форму для поиска -->
+<h1>Поиск публикаций</h1>
+<form method="GET">
+    {{ news.form }} <!-- Форму от фильтров за нас сделает django. А вот кнопку, увы придётся делать самому -->
+    <input type="submit" value="Найти">
+</form>
+    <hr>
+    {% if news.qs %}
+        <table>
+            <tr>
+                <td>
+                    Заголовок
+                </td>
+                <td>
+                    Дата
+                </td>
+                <td>
+                    Содержание
+                </td>
+            </tr>
+        {% for n in news.qs %}
+            <tr>
+                <td>
+                    {{ n.title|Censor }}
+                </td>
+                <td>
+                   {{ n.date_added|date:'d M Y' }}
+                </td>
+                <td>
+                    {{ n.text|Censor|truncatewords:50 }}
+                </td>
+            </tr>
+        {% endfor %}
+        </table>
+    {% else %}
+        <h2>Ничего не найдено</h2>
+    {% endif %}
+{% endblock content %}
