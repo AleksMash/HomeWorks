@@ -28,7 +28,9 @@ News
         {% for n in news %}
             <tr>
                 <td>
-                    {{ n.title|Censor }}
+                    <a href="{% url 'singlenew' n.id %}">{{ n.title|Censor }}</a>
+                    <a href="{% url 'post_update' n.id %}"><u>Редактировать</u></a>
+                    <a href="{% url 'post_delete' n.id %}"><u> Удалить </u></a>
                 </td>
                 <td>
                    {{ n.date_added|date:'d M Y' }}
@@ -39,6 +41,7 @@ News
             </tr>
         {% endfor %}
         </table>
+        <hr><a href="{% url 'post_create' %}">Добавить новую публикацию</a><hr>
         {% if is_paginated %}
 
         <!-- Если доступна предыдущая страница, то даём ссылку на неё и самую первую страницу -->

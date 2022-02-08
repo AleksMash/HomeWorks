@@ -48,7 +48,7 @@
     </tr>
     {% endfor %}
 </table>
-
+<a href="{% url 'product_create' %}">Добавить новый товар</a> <br>
 {% if is_paginated %}
 
     {% if page_obj.has_previous %}

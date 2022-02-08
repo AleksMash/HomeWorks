@@ -34,7 +34,9 @@ News
         {% for n in news.qs %}
             <tr>
                 <td>
-                    {{ n.title|Censor }}
+                    <a href="{% url 'singlenew' n.id %}"> {{ n.title|Censor }} </a>
+                    <a href="{% url 'post_update' n.id %}"><u> Редактировать </u></a>
+                    <a href="{% url 'post_delete' n.id %}"><u> Удалить </u></a>
                 </td>
                 <td>
                    {{ n.date_added|date:'d M Y' }}
@@ -48,4 +50,5 @@ News
     {% else %}
         <h2>Ничего не найдено</h2>
     {% endif %}
+    <hr><a href="{% url 'post_create' %}">Добавить новую публикацию</a><hr>
 {% endblock content %}

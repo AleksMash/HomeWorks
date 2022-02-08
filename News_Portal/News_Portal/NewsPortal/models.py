@@ -10,10 +10,15 @@ class Author(models.Model):
         self.user_rate = newrate
         self.save()
 
+    def __str__(self):
+        return f'{self.user.username.title()}'
+
 
 
 class Category(models.Model):
     name = models.CharField(unique=True, max_length=50)
+    def __str__(self):
+        return f'{self.name.title()}'
 
 class Post(models.Model):
     unknown = 0
@@ -44,9 +49,13 @@ class Post(models.Model):
         else:
             return self.text[0:123] + '...'
 
+    def get_absolute_url(self):  # добавим абсолютный путь, чтобы после создания нас перебрасывало на страницу с товаром
+        return f'/news/{self.id}'
+
 class PostCategory(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
+
 
 class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)

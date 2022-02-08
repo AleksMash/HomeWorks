@@ -1,8 +1,9 @@
 from django.shortcuts import render
-from django.views.generic import ListView, DetailView  # импортируем класс
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView  # импортируем класс
 from django.views import View  # импортируем простую вьюшку
 from .models import Post
 from .filters import NewsFilter
+from .forms import PostForm
 from django.core.paginator import Paginator  # импортируем класс, позволяющий удобно осуществлять постраничный вывод
 
 # который говорит нам о том, что в этом представлении мы будем выводить список объектов из БД
@@ -35,3 +36,21 @@ class NewsFiltered(ListView):
         context = super().get_context_data(**kwargs)
         context['news'] = NewsFilter(self.request.GET, queryset=self.get_queryset())  # вписываем наш фильтр в контекст
         return context
+
+class PostCreateView(CreateView):
+    template_name = 'post_create.html'
+    form_class = PostForm
+
+class PostUpdateView(UpdateView):
+    template_name = 'post_create.html'
+    form_class = PostForm
+
+    def get_object(self, **kwargs):
+        id = self.kwargs.get('pk')
+        return Post.objects.get(pk=id)
+
+class PostDeleteView(DeleteView):
+    template_name = 'post_delete.html'
+    queryset = Post.objects.all()
+    success_url = '/news/'
+
