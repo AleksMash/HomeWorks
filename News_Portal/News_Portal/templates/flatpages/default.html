@@ -30,6 +30,15 @@
                        <li class="nav-item active">
                            <a class="nav-link" href="/news/search">Post search</a>
                        </li>
+                       {% if user.is_authenticated %}
+                           <li class="nav-item active">
+                               <a class="nav-link" href="/accounts/logout">Logout</a>
+                           </li>
+                       {% else %}
+                            <li class="nav-item active">
+                               <a class="nav-link" href="/accounts/login">Login</a>
+                            </li>
+                       {% endif %}
                    </ul>
                </div>
            </div>
