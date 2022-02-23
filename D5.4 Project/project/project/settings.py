@@ -81,6 +81,8 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
+ACCOUNT_FORMS = {'signup': 'sign.models.BasicSignupForm'}
+
 SITE_ID = 1
 
 LOGIN_URL = '/accounts/login/'
