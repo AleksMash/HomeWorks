@@ -91,6 +91,8 @@ LOGIN_REDIRECT_URL = '/news/'
 
 WSGI_APPLICATION = 'News_Portal.wsgi.application'
 
+ACCOUNT_FORMS = {'signup': 'NewsPortal.forms.BasicSignupForm'}
+
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases

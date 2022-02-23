@@ -1,10 +1,15 @@
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView  # импортируем класс
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.views import View  # импортируем простую вьюшку
 from .models import Post
 from .filters import NewsFilter
 from .forms import PostForm
+from django.shortcuts import redirect
+from django.contrib.auth.models import Group
+from django.contrib.auth.decorators import login_required
+
+
 from django.core.paginator import Paginator  # импортируем класс, позволяющий удобно осуществлять постраничный вывод
 
 # который говорит нам о том, что в этом представлении мы будем выводить список объектов из БД
@@ -17,8 +22,14 @@ class NewsList(ListView):
                                     # как именно пользователю должны вывестись наши объекты
     context_object_name = 'news'    # это имя списка, в котором будут
                                     # лежать все объекты, его надо указать, чтобы обратиться к самому списку объектов через _HTML_-шаблон
-    queryset = Post.objects.filter(post_type=2).order_by('-id')
+    #queryset = Post.objects.all.order_by('-id')
+    ordering = ['-id']
     paginate_by = 2  #выводим по 3 новостей на страницу
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_not_author'] = not self.request.user.groups.filter(name = 'authors').exists()
+        return context
 
 
 # создаём представление, в котором будут детали конкретного отдельного товара
@@ -38,11 +49,13 @@ class NewsFiltered(ListView):
         context['news'] = NewsFilter(self.request.GET, queryset=self.get_queryset())  # вписываем наш фильтр в контекст
         return context
 
-class PostCreateView(CreateView):
+class PostCreateView(PermissionRequiredMixin, CreateView):
+    permission_required = ('NewsPortal.add_post')
     template_name = 'post_create.html'
     form_class = PostForm
 
-class PostUpdateView(LoginRequiredMixin, UpdateView):
+class PostUpdateView(PermissionRequiredMixin, UpdateView):
+    permission_required = ('NewsPortal.change_post')
     template_name = 'post_create.html'
     form_class = PostForm
 
@@ -50,8 +63,16 @@ class PostUpdateView(LoginRequiredMixin, UpdateView):
         id = self.kwargs.get('pk')
         return Post.objects.get(pk=id)
 
-class PostDeleteView(DeleteView):
+class PostDeleteView(PermissionRequiredMixin, DeleteView):
+    permission_required = ('NewsPortal.delete_post')
     template_name = 'post_delete.html'
     queryset = Post.objects.all()
     success_url = '/news/'
 
+@login_required
+def be_author(request):
+    user = request.user
+    auth_group = Group.objects.get(name='authors')
+    if not request.user.groups.filter(name='authors').exists():
+        auth_group.user_set.add(user)
+    return redirect('/')

@@ -41,7 +41,11 @@ News
             </tr>
         {% endfor %}
         </table>
-        <hr><a href="{% url 'post_create' %}">Добавить новую публикацию</a><hr>
+        <hr><a href="{% url 'post_create' %}">Добавить новую публикацию</a>
+        {% if is_not_author and user.is_authenticated %}
+            <button> <a href="{% url 'be_author' %}">Стать автором</a> </button>
+        {% endif %}
+        <hr>
         {% if is_paginated %}
 
         <!-- Если доступна предыдущая страница, то даём ссылку на неё и самую первую страницу -->
