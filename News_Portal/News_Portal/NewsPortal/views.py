@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView  # импортируем класс
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.core.mail import send_mail
 from django.views import View  # импортируем простую вьюшку
 from .models import Post, Category
 from .filters import NewsFilter
@@ -9,6 +8,7 @@ from .forms import PostForm, UpdateForm
 from django.shortcuts import redirect
 from django.contrib.auth.models import Group
 from django.contrib.auth.decorators import login_required
+from datetime import datetime, date
 
 
 from django.core.paginator import Paginator  # импортируем класс, позволяющий удобно осуществлять постраничный вывод
@@ -54,6 +54,15 @@ class PostCreateView(PermissionRequiredMixin, CreateView):
     permission_required = ('NewsPortal.add_post')
     template_name = 'post_create.html'
     form_class = PostForm
+
+    def get(self, request, *args, **kwargs):
+        user=request.user
+        if Post.objects.filter(author__user=user, date_added__date=datetime.utcnow().date()).count() >= 3:
+            context = {'msg_title': 'Ограничение на создание записей', 'msg_text': 'Допускается создание только трех публикаций за сутки.'}
+            return render(request, "msg_template.html", context=context)
+        else:
+            return super().get(request, *args, **kwargs)
+
 
 class PostUpdateView(PermissionRequiredMixin, UpdateView):
     permission_required = ('NewsPortal.change_post')
