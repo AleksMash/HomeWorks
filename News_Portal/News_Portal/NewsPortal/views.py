@@ -1,10 +1,11 @@
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView  # импортируем класс
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.core.mail import send_mail
 from django.views import View  # импортируем простую вьюшку
-from .models import Post
+from .models import Post, Category
 from .filters import NewsFilter
-from .forms import PostForm
+from .forms import PostForm, UpdateForm
 from django.shortcuts import redirect
 from django.contrib.auth.models import Group
 from django.contrib.auth.decorators import login_required
@@ -57,7 +58,7 @@ class PostCreateView(PermissionRequiredMixin, CreateView):
 class PostUpdateView(PermissionRequiredMixin, UpdateView):
     permission_required = ('NewsPortal.change_post')
     template_name = 'post_create.html'
-    form_class = PostForm
+    form_class = UpdateForm
 
     def get_object(self, **kwargs):
         id = self.kwargs.get('pk')
@@ -72,7 +73,31 @@ class PostDeleteView(PermissionRequiredMixin, DeleteView):
 @login_required
 def be_author(request):
     user = request.user
-    auth_group = Group.objects.get(name='authors')
+    auth_group:Group = Group.objects.get(name='authors')
     if not request.user.groups.filter(name='authors').exists():
         auth_group.user_set.add(user)
     return redirect('/')
+
+#подписка на новости определенной категории
+@login_required
+def cat_subscribe(request, cat_id):
+    user = request.user
+    cat = Category.objects.get(pk=cat_id)
+    cat.subscribers.add(user)
+    context = {'cat':cat}
+    return render(request, "subscribe_for_category.html",context=context)
+
+class CategoryView(ListView):
+    model = Post
+    template_name = 'news_from_category.html'
+    context_object_name = 'news'
+    ordering = ['-date_added']
+
+    def get_context_data(self, **kwargs):  #забираем отфильтрованные объекты переопределяя метод get_context_data у наследуемого класса (привет, полиморфизм, мы скучали!!!)
+        context = super().get_context_data(**kwargs)
+        id = self.kwargs.get('pk')
+        cat = Category.objects.get(pk=id)
+        context['cat_name'] = cat.name
+        context['cat_id'] = cat.id
+        context['news']=Post.objects.filter(categories=cat)
+        return context

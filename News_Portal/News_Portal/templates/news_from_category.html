@@ -10,7 +10,7 @@ News
 
 <!-- В контенте на странице мы выводим все новости -->
 {% block content %}
-   <h1>Все новости</h1> <!--(общее число новостей: {{ news|length }}) - это пока убрал%-->
+<h1>Новости из категории: <b>{{ cat_name }}</b></h1> <!--(общее число новостей: {{ news|length }}) - это пока убрал%-->
     <hr>
     {% if news %}
         <table>
@@ -23,9 +23,6 @@ News
                 </td>
                 <td>
                     Содержание
-                </td>
-                <td>
-                    Категории
                 </td>
             </tr>
         {% for n in news %}
@@ -41,11 +38,6 @@ News
                 <td>
                     {{ n.text|Censor|truncatewords:50 }}
                 </td>
-                <td>
-                    {% for cat in n.categories.all %}
-                        <a href="{% url 'cat_view' cat.id %}"> {{ cat.name }} </a>
-                    {% endfor %}
-                </td>
             </tr>
         {% endfor %}
         </table>
@@ -54,6 +46,8 @@ News
             <button> <a href="{% url 'be_author' %}">Стать автором</a> </button>
         {% endif %}
         <hr>
+        <hr>
+        <button> <a href="{% url 'cat_subscribe' cat_id %}">Подписаться</a> </button>
         {% if is_paginated %}
 
         <!-- Если доступна предыдущая страница, то даём ссылку на неё и самую первую страницу -->

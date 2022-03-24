@@ -1,0 +1,12 @@
+{% extends 'flatpages/default.html' %}
+
+{% block title %} Category subscription {% endblock title %}
+
+{% block content %}
+
+<h3>Подписка на публикации</h3>
+<hr>
+<p>Вы подписались на публикации в категории: <b><a href="{% url 'cat_view' cat.id %}"> {{ cat.name }} </a></b></p>
+<p>См. также <a href="/news"">все публикации</a></p>
+
+{% endblock content %}

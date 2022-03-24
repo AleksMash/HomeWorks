@@ -30,6 +30,9 @@ News
                 <td>
                     Содержание
                 </td>
+                <td>
+                    Категория
+                </td>
             </tr>
         {% for n in news.qs %}
             <tr>
@@ -43,6 +46,11 @@ News
                 </td>
                 <td>
                     {{ n.text|Censor|truncatewords:50 }}
+                </td>
+                <td>
+                    {% for cat in n.categories.all %}
+                        <a href="{% url 'cat_view' cat.id %}"> {{ cat.name }} </a>
+                    {% endfor %}
                 </td>
             </tr>
         {% endfor %}

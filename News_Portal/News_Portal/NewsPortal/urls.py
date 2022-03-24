@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import NewsList, NewDetail, NewsFiltered, PostCreateView, PostUpdateView, PostDeleteView, be_author  # импортируем наше представление
+from .views import NewsList, NewDetail, NewsFiltered, PostCreateView, PostUpdateView, PostDeleteView, be_author, CategoryView, cat_subscribe# импортируем наше представление
 from django.contrib.auth.views import LoginView, LogoutView
 
 urlpatterns = [
@@ -13,5 +13,7 @@ urlpatterns = [
     path('<int:pk>/delete/', PostDeleteView.as_view(), name='post_delete'),
     path ('login/', LoginView.as_view(template_name = 'login.html'), name='login'),
     path ('logout/', LogoutView.as_view(template_name = 'logout.html'), name='logout'),
-    path ('be_author/', be_author, name = 'be_author')
+    path ('be_author/', be_author, name = 'be_author'),
+    path ('from_cat/<int:pk>', CategoryView.as_view(template_name = 'news_from_category.html'), name='cat_view'),
+    path ('cat_subscribe/<int:cat_id>',cat_subscribe, name="cat_subscribe")
 ]
