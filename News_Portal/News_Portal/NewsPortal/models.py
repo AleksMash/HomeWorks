@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 from django.contrib.auth.models import User
 
 # Create your models here.
@@ -20,6 +21,12 @@ class Category(models.Model):
     subscribers = models.ManyToManyField(User)
     def __str__(self):
         return f'{self.name.title()}'
+
+    def get_absolute_url(self):
+        return reverse('cat_view', kwargs={'pk': self.pk})
+
+    def get_url_for_mail(self):
+        return "http://127.0.0.1:8000"+self.get_absolute_url()
 
 class Post(models.Model):
     unknown = 0
@@ -52,6 +59,9 @@ class Post(models.Model):
 
     def get_absolute_url(self):  # добавим абсолютный путь, чтобы после создания нас перебрасывало на страницу с товаром
         return f'/news/{self.id}'
+
+    def get_url_for_mail(self):
+        return "http://127.0.0.1:8000"+self.get_absolute_url()
 
 class PostCategory(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)

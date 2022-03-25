@@ -9,6 +9,7 @@ from django.shortcuts import redirect
 from django.contrib.auth.models import Group
 from django.contrib.auth.decorators import login_required
 from datetime import datetime, date
+from .tasks import send_week_posts
 
 
 from django.core.paginator import Paginator  # импортируем класс, позволяющий удобно осуществлять постраничный вывод
@@ -110,3 +111,8 @@ class CategoryView(ListView):
         context['cat_id'] = cat.id
         context['news']=Post.objects.filter(categories=cat)
         return context
+
+def test_view(self, command):
+    if command == 'weekly_post':
+        send_week_posts()
+    return redirect('/')

@@ -15,7 +15,6 @@ def save_state(sender, instance, created, **kwargs):
     else:
         post_created = None
 
-
 @receiver(m2m_changed, sender=Post.categories.through)
 def notify_users(sender, instance, action, **kwargs):
     global post_created

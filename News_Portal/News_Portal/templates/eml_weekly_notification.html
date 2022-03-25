@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Публикации за неделю</title>
+</head>
+{% load custom_filters %}
+<body>
+    <p>Здравстуте {{ user.username }}!</p>
+    <p>Новые публикацию за неделю в избранных категориях</p>
+    <hr>
+    <table>
+            <tr>
+                <td>
+                    Заголовок
+                </td>
+                <td>
+                    Дата
+                </td>
+                <td>
+                    Содержание
+                </td>
+                <td>
+                    Категории
+                </td>
+            </tr>
+            {% for p in post %}
+            <tr>
+                <td>
+                    <a href="{{ p.get_url_for_mail }}">{{ p.title|Censor }}</a>
+                </td>
+                <td>
+                   {{ p.date_added|date:'d M Y' }}
+                </td>
+                <td>
+                    {{ p.text|Censor|truncatewords:50 }}
+                </td>
+                <td>
+                    {% for cat in p.categories.all %}
+                        <a href="{{ cat.get_url_for_mail }}"> {{ cat.name }} </a>
+                    {% endfor %}
+                </td>
+            </tr>
+        {% endfor %}
+</body>
+</html>

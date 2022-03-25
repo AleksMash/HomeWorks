@@ -53,6 +53,7 @@ News
         {% if is_not_author and user.is_authenticated %}
             <button> <a href="{% url 'be_author' %}">Стать автором</a> </button>
         {% endif %}
+        <button> <a href="{% url 'command' 'weekly_post' %}">Рассылка!</a> </button>
         <hr>
         {% if is_paginated %}
 
