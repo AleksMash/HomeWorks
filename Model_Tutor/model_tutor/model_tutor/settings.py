@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'mc_donalds'
+    'mc_donalds',
+    'board'
 ]
 
 MIDDLEWARE = [
@@ -122,3 +123,12 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CELERY_RESULT_BACKEND = 'redis://redis-15821.c232.us-east-1-2.ec2.cloud.redislabs.com:15821'
+CELERY_BROKER_URL = 'redis://redis-15821.c232.us-east-1-2.ec2.cloud.redislabs.com:15821'
+CELERY_BROKER_PASSWORD = 'x6V6RDd3Q6SxFEP4JYT6BDNnEq5iMgNy'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+
+
