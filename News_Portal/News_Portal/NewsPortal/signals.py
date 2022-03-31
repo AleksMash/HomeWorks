@@ -4,6 +4,7 @@ from django.core.mail import EmailMultiAlternatives, send_mail
 from django.contrib.auth.models import User
 from django.template.loader import render_to_string
 from .models import Post, Category
+from .tasks import notify_on_creation
 
 post_created: Post
 
@@ -19,13 +20,7 @@ def save_state(sender, instance, created, **kwargs):
 def notify_users(sender, instance, action, **kwargs):
     global post_created
     if post_created != None and  action == 'post_add' and post_created.pk == instance.pk:
-        recipients = []
-        sub: User
-        #print(post.categories.all().count())
-        for cat in instance.categories.all():
-           for sub in cat.subscribers.all():
-                if not sub.email in recipients:
-                    recipients.append(sub.email)
-                    html_content = render_to_string('eml_post_created.html', {'post': instance, 'user': sub})
-                    send_mail(f'{instance.title}','',None,[sub.email],html_message=html_content)
+        print('Необходимо оповещение')
+        notify_on_creation.delay(instance.pk) #.apply_async([instance.pk], countdown = 30)
+        print('В очередь встали')
         post_created == None
