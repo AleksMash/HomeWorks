@@ -3,5 +3,5 @@ import time
 
 @shared_task
 def hello():
-    time.sleep(10)
+    #time.sleep(5)
     print("Hello, world!")

@@ -124,9 +124,9 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CELERY_RESULT_BACKEND = 'redis://redis-15821.c232.us-east-1-2.ec2.cloud.redislabs.com:15821'
-CELERY_BROKER_URL = 'redis://redis-15821.c232.us-east-1-2.ec2.cloud.redislabs.com:15821'
-CELERY_BROKER_PASSWORD = 'x6V6RDd3Q6SxFEP4JYT6BDNnEq5iMgNy'
+CELERY_BROKER_URL = 'redis://user:Mypassword123+@redis-15821.c232.us-east-1-2.ec2.cloud.redislabs.com:15821'
+CELERY_RESULT_BACKEND = 'redis://user:Mypassword123+@redis-15821.c232.us-east-1-2.ec2.cloud.redislabs.com:15821'
+#CELERY_BROKER_PASSWORD = 'x6V6RDd3Q6SxFEP4JYT6BDNnEq5iMgNy'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'

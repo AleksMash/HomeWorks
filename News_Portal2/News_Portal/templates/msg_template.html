@@ -1,0 +1,13 @@
+{% extends 'flatpages/default.html' %}
+
+{% block title %} Сообщение {% endblock title %}
+
+{% block content %}
+
+<h3>{{ msg_title }}</h3>
+<hr>
+<p>{{ msg_text }}</p>
+<hr>
+<input type="button" onclick="history.back();" value="Назад"/>
+
+{% endblock content %}

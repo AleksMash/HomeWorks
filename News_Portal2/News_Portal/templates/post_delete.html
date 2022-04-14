@@ -1,0 +1,22 @@
+<!--  наследуемся от шаблона default.html, который мы создавали ещё во времена flatpages -->
+{% extends 'flatpages/default.html' %}
+
+{% load custom_filters %}
+
+<!-- Название у нас будет proudcts -->
+{% block title %}
+Удаление публикации
+{% endblock title %}
+
+<!-- В контенте на странице мы выводим сам товар, ID которого было передано в адрес -->
+{% block content %}
+<h1>{{ post.title }}</h1>
+<hr>
+<b>Дата публикации: {{ post.date_added|date:'d M Y h:i' }}</b>
+<hr>
+{{ post.text }}
+<hr>
+<form method="POST">
+    {% csrf_token %}
+    <input type="submit" value="Подтвердить удаление"></form>
+{% endblock content %}

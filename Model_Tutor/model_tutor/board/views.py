@@ -4,5 +4,6 @@ from mc_donalds.tasks import hello
 
 class IndexView(View):
     def get(self, request):
-        hello.delay()
-        return HttpResponse('Hello!')
+        a=hello.delay()
+        r=a
+        return HttpResponse(r)
